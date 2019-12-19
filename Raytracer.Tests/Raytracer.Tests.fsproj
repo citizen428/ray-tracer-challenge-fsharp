@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Include="TuplesTests.fs" />
     <Compile Include="ColorTests.fs" />
+    <Compile Include="CanvasTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
