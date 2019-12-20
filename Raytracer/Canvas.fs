@@ -12,11 +12,11 @@ module Canvas =
     let make width height =
         { Width = width
           Height = height
-          Pixels = Array2D.create width height Color.black }
+          Pixels = Array2D.create height width Color.black }
 
-    let writePixel canvas x y color = Array2D.set canvas.Pixels x y color
+    let writePixel canvas x y color = Array2D.set canvas.Pixels y x color
 
-    let pixelAt canvas x y = Array2D.get canvas.Pixels x y
+    let pixelAt canvas x y = Array2D.get canvas.Pixels y x
 
     let toPpm canvas =
         let clamp f =
@@ -32,16 +32,16 @@ module Canvas =
                           (fun m -> m.Value.TrimStart(' ') + "\n"))
                  .TrimEnd('\n')
 
-        let pixelsToString pixels =
-            pixels
+        let pixelsToString canvas =
+            canvas.Pixels
             |> Array2D.map colorToRgb
             |> Seq.cast<string>
-            |> Seq.chunkBySize (Array2D.length1 pixels)
+            |> Seq.chunkBySize canvas.Width
             |> Seq.map generateRows
             |> fun strings -> String.Join("\n", strings)
 
         let header =
             sprintf "P3\n%d %d\n255" canvas.Width canvas.Height
 
-        let pixels = pixelsToString canvas.Pixels
+        let pixels = pixelsToString canvas
         sprintf "%s\n%s\n" header pixels
