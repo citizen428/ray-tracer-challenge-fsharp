@@ -26,7 +26,7 @@ module Canvas =
         let colorToRgb (c : Color.T) =
             sprintf "%d %d %d" (clamp c.Red) (clamp c.Green) (clamp c.Blue)
 
-        let generateRows (rgbs : seq<string>) =
+        let splitLongLines (rgbs : seq<string>) =
             let row = String.Join(" ", rgbs)
             Regex.Replace(row, "[\s\S]{1,69}(?!\S)",
                           (fun m -> m.Value.TrimStart(' ') + "\n"))
@@ -37,8 +37,8 @@ module Canvas =
             |> Array2D.map colorToRgb
             |> Seq.cast<string>
             |> Seq.chunkBySize canvas.Width
-            |> Seq.map generateRows
-            |> fun strings -> String.Join("\n", strings)
+            |> Seq.map splitLongLines
+            |> String.concat "\n"
 
         let header =
             sprintf "P3\n%d %d\n255" canvas.Width canvas.Height
