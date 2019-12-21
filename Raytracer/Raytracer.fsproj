@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Constants.fs" />
     <Compile Include="Tuples.fs" />
     <Compile Include="Color.fs" />
     <Compile Include="Canvas.fs" />

@@ -21,7 +21,7 @@ module PointTests =
         point.Z |> should equal 3.1
 
     [<Fact>]
-    let ``the w component of points is always 1.0``() =
+    let ``the w component of points is always 1``() =
         let point = Point.make 4.3 -4.2 3.1
         point.W |> should equal 1.0
 
@@ -30,14 +30,14 @@ module PointTests =
         let point = Point.make 3.0 -2.0 5.0
         let vector = Vector.make -2.0 3.0 1.0
         let expected = Point.make 1.0 1.0 6.0
-        point + vector |> should equal expected
+        point + vector .= expected |> should equal true
 
     [<Fact>]
     let ``subtracting a vector from a point results in a new point``() =
         let point = Point.make 3.0 2.0 1.0
         let vector = Vector.make 5.0 6.0 7.0
         let expected = Point.make -2.0 -4.0 -6.0
-        point - vector |> should equal expected
+        point - vector .= expected |> should equal true
 
     [<Fact>]
     let ``subtracting two points gives the vector between them``() =
@@ -45,6 +45,12 @@ module PointTests =
         let point2 = Point.make 5.0 6.0 7.0
         let expected = Vector.make -2.0 -4.0 -6.0
         point1 - point2 |> should equal expected
+
+    [<Fact>]
+    let ``it considers epsilon when testing for equality``() =
+        let p1 = Point.make 0.00001 0. 0.
+        let p2 = Point.make 0. 0. 0.
+        p1 .= p2 |> should equal true
 
 module VectorTests =
     [<Fact>]
@@ -63,43 +69,49 @@ module VectorTests =
         vector.Z |> should equal 3.1
 
     [<Fact>]
-    let ``the w component of vectors is always 0.0``() =
+    let ``the w component of vectors is always 0``() =
         let vector = Vector.make 4.3 -4.2 3.1
         vector.W |> should equal 0.0
+
+    [<Fact>]
+    let ``it considers epsilon when testing for equality``() =
+        let v1 = Vector.make 0.00001 0. 0.
+        let v2 = Vector.make 0. 0. 0.
+        v1 .= v2 |> should equal true
 
     [<Fact>]
     let ``adding two vectors results in a new vector``() =
         let vector1 = Vector.make 3.0 -2.0 5.0
         let vector2 = Vector.make -2.0 3.0 1.0
         let expected = Vector.make 1.0 1.0 6.0
-        vector1 + vector2 |> should equal expected
+        vector1 + vector2 .= expected |> should equal true
 
     [<Fact>]
     let ``subtracting two vectors results in a new vector``() =
         let vector1 = Vector.make 3.0 2.0 1.0
         let vector2 = Vector.make 5.0 6.0 7.0
         let expected = Vector.make -2.0 -4.0 -6.0
-        vector1 - vector2 |> should equal expected
+        vector1 - vector2 .= expected |> should equal true
 
     [<Fact>]
     let ``negating a vector results in the opposite vector``() =
         let vector = Vector.make 1.0 -2.0 3.0
         let expected = Vector.make -1.0 2.0 -3.0
-        -vector |> should equal expected
+        -vector .= expected |> should equal true
 
     [<Fact>]
     let ``multiplying a vector by a scalar results in a new vector``() =
         let vector = Vector.make 1.0 -2.0 3.0
         let scalar = 2.0
         let expected = Vector.make 2.0 -4.0 6.0
-        vector * scalar |> should equal expected
+        vector * scalar .= expected |> should equal true
 
     [<Fact>]
     let ``dividing a vector by a scalar results in a new vector``() =
         let vector = Vector.make 1.0 -2.0 3.0
         let scalar = 2.0
         let expected = Vector.make 0.5 -1.0 1.5
-        vector / scalar |> should equal expected
+        vector / scalar .= expected |> should equal true
 
     [<Fact>]
     let ``a vector has a magnitude (length)``() =
@@ -126,7 +138,7 @@ module VectorTests =
         List.map Vector.normalize vs |> should equal expected
 
     [<Fact>]
-    let ``normalized vectors have a magnitude of 1.0``() =
+    let ``normalized vectors have a magnitude of 1``() =
         let vector = Vector.make 1.0 -2.0 3.0
         Vector.normalize vector
         |> Vector.magnitude

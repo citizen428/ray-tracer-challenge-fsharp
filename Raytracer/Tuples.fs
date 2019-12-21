@@ -1,5 +1,7 @@
 namespace Raytracer.Types
 
+open Raytracer.Constants
+
 module rec Tuples =
     module Point =
         type T =
@@ -26,6 +28,10 @@ module rec Tuples =
                   Z = p1.Z - p2.Z
                   W = p1.W - p2.W }
 
+            static member (.=) (p1, p2) =
+                abs (p1.X - p2.X) < epsilon && abs (p1.Y - p2.Y) < epsilon
+                && abs (p1.Z - p2.Z) < epsilon && abs (p1.W - p2.W) < epsilon
+
         let make x y z =
             { X = x
               Y = y
@@ -45,13 +51,11 @@ module rec Tuples =
                   Z = v1.Z + v2.Z
                   W = v1.W + v2.W }
 
-
             static member (-) (v1, v2) =
                 { X = v1.X - v2.X
                   Y = v1.Y - v2.Y
                   Z = v1.Z - v2.Z
                   W = v1.W - v2.W }
-
 
             static member (~-) (v) =
                 { X = -v.X
@@ -67,6 +71,10 @@ module rec Tuples =
                   Y = v.Y / scalar
                   Z = v.Z / scalar
                   W = v.W / scalar }
+
+            static member (.=) (v1, v2) =
+                abs (v1.X - v2.X) < epsilon && abs (v1.Y - v2.Y) < epsilon
+                && abs (v1.Z - v2.Z) < epsilon && abs (v1.W - v2.W) < epsilon
 
         let make x y z =
             { X = x
