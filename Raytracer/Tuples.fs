@@ -29,8 +29,8 @@ module rec Tuples =
                   W = p1.W - p2.W }
 
             static member (.=) (p1, p2) =
-                abs (p1.X - p2.X) < epsilon && abs (p1.Y - p2.Y) < epsilon
-                && abs (p1.Z - p2.Z) < epsilon && abs (p1.W - p2.W) < epsilon
+                abs (p1.X - p2.X) < Epsilon && abs (p1.Y - p2.Y) < Epsilon
+                && abs (p1.Z - p2.Z) < Epsilon && abs (p1.W - p2.W) < Epsilon
 
         let make x y z =
             { X = x
@@ -73,8 +73,8 @@ module rec Tuples =
                   W = v.W / scalar }
 
             static member (.=) (v1, v2) =
-                abs (v1.X - v2.X) < epsilon && abs (v1.Y - v2.Y) < epsilon
-                && abs (v1.Z - v2.Z) < epsilon && abs (v1.W - v2.W) < epsilon
+                abs (v1.X - v2.X) < Epsilon && abs (v1.Y - v2.Y) < Epsilon
+                && abs (v1.Z - v2.Z) < Epsilon && abs (v1.W - v2.W) < Epsilon
 
         let make x y z =
             { X = x

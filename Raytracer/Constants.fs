@@ -1,4 +1,5 @@
 namespace Raytracer
 
 module Constants =
-    let epsilon = 0.0001
+    [<Literal>]
+    let Epsilon = 0.0001

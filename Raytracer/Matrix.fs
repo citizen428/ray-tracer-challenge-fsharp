@@ -14,7 +14,7 @@ module Matrix =
                 seq {
                     for r in 0 .. len do
                         for c in 0 .. len do
-                            if abs (m1.[r, c] - m2.[r, c]) > epsilon then
+                            if abs (m1.[r, c] - m2.[r, c]) > Epsilon then
                                 yield false
                 }
                 |> Seq.forall id
@@ -109,7 +109,7 @@ module Matrix =
 
     let inverse m =
         let d = determinant m
-        if abs d < epsilon then
+        if abs d < Epsilon then
             failwith "Matrix is not invertible"
         else
             let result = Array2D.zeroCreate m.Dimension m.Dimension
