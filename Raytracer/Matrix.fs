@@ -3,7 +3,7 @@ namespace Raytracer.Types
 open Raytracer.Constants
 open Raytracer.Types.Tuples
 
-module Matrix =
+module rec Matrix =
     type T =
         { Dimension : int
           Entries : float [,] }
@@ -34,23 +34,33 @@ module Matrix =
 
             { Dimension = m1.Dimension
               Entries = result }
-
+              
+        static member (*) (m, p : Point.T) : Point.T =
+            let result = multiplyHelper m p
+            Point.make result.[0] result.[1] result.[2]
+            
         static member (*) (m, v : Vector.T) : Vector.T =
-            let len = m.Dimension - 1
-
-            let result =
-                seq {
-                    for r in 0 .. len ->
-                        let row = m.Entries.[r, *]
-                        let vArray = [| v.X; v.Y; v.Z; v.W |]
-                        Array.fold2 (fun sum r c -> sum + r * c) 0.0 row vArray
-                }
-                |> Seq.toArray
-
+            let result = multiplyHelper m v
             Vector.make result.[0] result.[1] result.[2]
 
         member x.Item
             with get (r, c) = x.Entries.[r, c]
+
+    let private multiplyHelper m (tuple : obj) : float [] =
+        let tArr =
+            match tuple with
+            | :? Point.T as p -> [| p.X; p.Y; p.Z; p.W |]
+            | :? Vector.T as v -> [| v.X; v.Y; v.Z; v.W |]
+            | _ -> failwith "Type needs to be point or vector"
+
+        let len = m.Dimension - 1
+
+        seq {
+            for r in 0 .. len ->
+                let row = m.Entries.[r, *]
+                Array.fold2 (fun sum r c -> sum + r * c) 0.0 row tArr
+        }
+        |> Seq.toArray
 
     let make rows =
         let dim = List.length rows
@@ -104,8 +114,7 @@ module Matrix =
 
     and minor m row col = determinant (submatrix m row col)
 
-    let isInvertible m =
-        abs (determinant m) > Epsilon
+    let isInvertible m = abs (determinant m) > Epsilon
 
     let inverse m =
         let d = determinant m

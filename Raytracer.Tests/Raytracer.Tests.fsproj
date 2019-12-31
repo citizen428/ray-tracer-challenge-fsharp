@@ -16,6 +16,7 @@
     <Compile Include="ColorTests.fs" />
     <Compile Include="CanvasTests.fs" />
     <Compile Include="MatrixTests.fs" />
+    <Compile Include="TransformationTests.fs" />
     <Compile Include="Program.fs" />
     <None Include="Scripts\Projectile.fsx" />
     <None Include="Scripts\ProjectilePPM.fsx" />
