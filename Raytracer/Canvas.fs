@@ -1,4 +1,4 @@
-namespace Raytracer.Types
+namespace Raytracer
 
 open System
 open System.Text.RegularExpressions

@@ -5,7 +5,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Constants.fs" />
-    <Compile Include="Tuples.fs" />
+    <Compile Include="Vector.fs" />
+    <Compile Include="Point.fs" />
     <Compile Include="Color.fs" />
     <Compile Include="Canvas.fs" />
     <Compile Include="Matrix.fs" />

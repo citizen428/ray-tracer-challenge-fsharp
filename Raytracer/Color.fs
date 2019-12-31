@@ -1,4 +1,4 @@
-namespace Raytracer.Types
+namespace Raytracer
 
 module rec Color =
     type T =

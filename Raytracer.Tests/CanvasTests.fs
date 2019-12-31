@@ -2,7 +2,7 @@ module CanvasTests
 
 open FsUnit.Xunit
 open Xunit
-open Raytracer.Types
+open Raytracer
 open TestUtilities
 
 [<Fact>]

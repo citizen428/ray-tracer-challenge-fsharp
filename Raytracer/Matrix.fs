@@ -1,7 +1,6 @@
-namespace Raytracer.Types
+namespace Raytracer
 
-open Raytracer.Constants
-open Raytracer.Types.Tuples
+open Constants
 
 module rec Matrix =
     type T =

@@ -2,8 +2,7 @@ module MatrixTests
 
 open FsUnit.Xunit
 open Xunit
-open Raytracer.Types
-open Raytracer.Types.Tuples
+open Raytracer
 
 [<Fact>]
 let ``Constructing and inspecting a 4x4 matrix``() =

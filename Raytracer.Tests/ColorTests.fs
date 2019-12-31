@@ -2,7 +2,7 @@ module ColorTests
 
 open FsUnit.Xunit
 open Xunit
-open Raytracer.Types
+open Raytracer
 
 [<Fact>]
 let ``it can access individual color components``() =

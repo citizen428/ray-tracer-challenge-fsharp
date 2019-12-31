@@ -12,7 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestUtilities.fs" />
-    <Compile Include="TuplesTests.fs" />
+    <Compile Include="VectorTests.fs" />
+    <Compile Include="PointTests.fs" />
     <Compile Include="ColorTests.fs" />
     <Compile Include="CanvasTests.fs" />
     <Compile Include="MatrixTests.fs" />
