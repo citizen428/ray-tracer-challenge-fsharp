@@ -7,14 +7,24 @@ module rec Matrix =
         { Dimension : int
           Entries : float [,] }
 
+    let make rows =
+        let dim = List.length rows
+
+        if dim >= 2 && dim <= 4
+           && List.forall (fun l -> List.length l = dim) rows then
+            { Dimension = dim
+              Entries = array2D rows }
+        else
+            failwith "Matrix must be square with dimension 2, 3 or 4"
+
+    type T with
         static member (.=) (m1, m2 : T) =
             let allWithinEpsilon =
                 let len = m1.Dimension - 1
                 seq {
                     for r in 0 .. len do
                         for c in 0 .. len do
-                            if abs (m1.[r, c] - m2.[r, c]) > Epsilon then
-                                yield false
+                            yield abs (m1.[r, c] - m2.[r, c]) <= Epsilon
                 }
                 |> Seq.forall id
 
@@ -33,11 +43,11 @@ module rec Matrix =
 
             { Dimension = m1.Dimension
               Entries = result }
-              
+
         static member (*) (m, p : Point.T) : Point.T =
             let result = multiplyHelper m p
             Point.make result.[0] result.[1] result.[2]
-            
+
         static member (*) (m, v : Vector.T) : Vector.T =
             let result = multiplyHelper m v
             Vector.make result.[0] result.[1] result.[2]
@@ -54,22 +64,9 @@ module rec Matrix =
 
         let len = m.Dimension - 1
 
-        seq {
-            for r in 0 .. len ->
-                let row = m.Entries.[r, *]
-                Array.fold2 (fun sum r c -> sum + r * c) 0.0 row tArr
-        }
-        |> Seq.toArray
-
-    let make rows =
-        let dim = List.length rows
-
-        if dim >= 2 && dim <= 4
-           && List.forall (fun l -> List.length l = dim) rows then
-            { Dimension = dim
-              Entries = array2D rows }
-        else
-            failwith "Matrix must be square with dimension 2, 3 or 4"
+        [| for r in 0 .. len ->
+            let row = m.Entries.[r, *]
+            Array.fold2 (fun sum r c -> sum + r * c) 0.0 row tArr |]
 
     let identity =
         make

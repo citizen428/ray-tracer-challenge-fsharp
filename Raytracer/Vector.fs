@@ -2,7 +2,7 @@
 
 open Constants
 
-module rec Vector =
+module Vector =
     type T =
         { X : float
           Y : float
@@ -28,7 +28,10 @@ module rec Vector =
               W = -v.W }
 
         static member (*) (v, scalar) =
-            make (v.X * scalar) (v.Y * scalar) (v.Z * scalar)
+            { X = v.X * scalar
+              Y = v.Y * scalar
+              Z = v.Z * scalar
+              W = v.W * scalar }
 
         static member (/) (v, scalar) =
             { X = v.X / scalar
