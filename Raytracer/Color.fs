@@ -25,4 +25,5 @@ module Color =
             make (c1.Red * c2.Red) (c1.Green * c2.Green) (c1.Blue * c2.Blue)
 
     let black = make 0. 0. 0.
+    let white = make 1. 1. 1.
     let red = make 1. 0. 0.

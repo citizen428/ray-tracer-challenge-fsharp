@@ -27,5 +27,6 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
     <PackageReference Include="FsUnit.xUnit" Version="3.8.0" />
     <ProjectReference Include="..\Raytracer\Raytracer.fsproj" />
+    <None Include="Scripts\Clock.fsx" />
   </ItemGroup>
 </Project>
