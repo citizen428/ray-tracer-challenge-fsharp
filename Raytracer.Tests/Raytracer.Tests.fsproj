@@ -18,6 +18,9 @@
     <Compile Include="CanvasTests.fs" />
     <Compile Include="MatrixTests.fs" />
     <Compile Include="TransformationTests.fs" />
+    <Compile Include="RayTests.fs" />
+    <Compile Include="IntersectionTests.fs" />
+    <Compile Include="SphereTests.fs" />
     <Compile Include="Program.fs" />
     <None Include="Scripts\Projectile.fsx" />
     <None Include="Scripts\ProjectilePPM.fsx" />

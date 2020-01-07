@@ -11,6 +11,10 @@
     <Compile Include="Canvas.fs" />
     <Compile Include="Matrix.fs" />
     <Compile Include="Transformation.fs" />
+    <Compile Include="Ray.fs" />
+    <Compile Include="Intersection.fs" />
+    <Compile Include="Shape.fs" />
+    <Compile Include="Sphere.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
