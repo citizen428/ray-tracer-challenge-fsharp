@@ -2,7 +2,7 @@ namespace Raytracer
 
 module Sphere =
     let make =
-        let intersect (s : Shape.T) (r : Ray.T) =
+        let intersect (s : Shape) (r : Ray) =
             let sphere_to_ray = r.Origin - Point.make 0. 0. 0.
             let a = Vector.dot r.Direction r.Direction
             let b = 2. * (Vector.dot r.Direction sphere_to_ray)
@@ -12,10 +12,10 @@ module Sphere =
             if discriminant < 0. then
                 []
             else
-                let t1 = (-b - sqrt (discriminant)) / (2. * a)
-                let t2 = (-b + sqrt (discriminant)) / (2. * a)
+                let f1 = (-b - sqrt (discriminant)) / (2. * a)
+                let f2 = (-b + sqrt (discriminant)) / (2. * a)
                 Intersection.listOf
-                    [ Intersection.make t1 s
-                      Intersection.make t2 s ]
+                    [ Intersection.make f1 s
+                      Intersection.make f2 s ]
 
-        Shape.make Shape.Type.Sphere intersect
+        Shape.make ShapeType.Sphere intersect

@@ -5,12 +5,12 @@
 open Raytracer
 
 type Projectile =
-    { position : Point.T
-      velocity : Vector.T }
+    { position : Point
+      velocity : Vector }
 
 type Environment =
-    { gravity : Vector.T
-      wind : Vector.T }
+    { gravity : Vector
+      wind : Vector }
 
 let tick env p =
     { position = p.position + p.velocity

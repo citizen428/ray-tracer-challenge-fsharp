@@ -1,27 +1,22 @@
 namespace Raytracer
 
+type ShapeType = Sphere
+
+type Shape =
+    { Object : ShapeType
+      Intersect : Shape -> Ray -> Shape Intersection list
+      Transformation : Matrix }
+    member x.InverseTransformation = Matrix.inverse x.Transformation
+
 module Shape =
-    type Type = Sphere
+    let make shape intersectFn =
+        { Object = shape
+          Intersect = intersectFn
+          Transformation = Matrix.identity }
 
-    type IntersectFun = T -> Ray.T -> T Intersection.IntersectionList
-
-    and T =
-        { Shape : Type
-          Transformation : Matrix.T
-          InverseTransformation : Matrix.T
-          Intersect : IntersectFun }
-
-    let make (shape : Type) (intersect : IntersectFun) =
-        { Shape = shape
-          Transformation = Matrix.identity
-          InverseTransformation = Matrix.identity
-          Intersect = intersect }
-
-    let intersect shape ray =
+    let intersect (shape : Shape) ray =
         let ray2 = Ray.transform ray shape.InverseTransformation
         shape.Intersect shape ray2
 
     let transform shape transformation =
-        { shape with
-              Transformation = transformation
-              InverseTransformation = Matrix.inverse transformation }
+        { shape with Transformation = transformation }

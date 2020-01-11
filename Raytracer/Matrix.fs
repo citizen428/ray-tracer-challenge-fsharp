@@ -2,11 +2,65 @@ namespace Raytracer
 
 open Constants
 
-module rec Matrix =
-    type T =
-        { Dimension : int
-          Entries : float [,] }
+type Matrix =
+    { Dimension : int
+      Entries : float [,] }
 
+    static member (.=) (m1, m2 : Matrix) =
+        let allWithinEpsilon =
+            let len = m1.Dimension - 1
+            seq {
+                for r in 0 .. len do
+                    for c in 0 .. len do
+                        yield abs (m1.[r, c] - m2.[r, c]) <= Epsilon
+            }
+            |> Seq.forall id
+
+        m1.Dimension = m2.Dimension && allWithinEpsilon
+
+
+    static member (*) (m1, m2) =
+        let len = m1.Dimension - 1
+        let result = Array2D.zeroCreate m1.Dimension m1.Dimension
+
+        for r in 0 .. len do
+            for c in 0 .. len do
+                let row = m1.Entries.[r, *]
+                let col = m2.Entries.[*, c]
+                Array.fold2 (fun sum r c -> sum + r * c) 0.0 row col
+                |> Array2D.set result r c
+
+        { Dimension = m1.Dimension
+          Entries = result }
+
+
+    static member private multiplyHelper m (tuple : obj) : float [] =
+        let tArr =
+            match tuple with
+            | :? Point as p -> [| p.X; p.Y; p.Z; p.W |]
+            | :? Vector as v -> [| v.X; v.Y; v.Z; v.W |]
+            | _ -> failwith "Type needs to be point or vector"
+
+        let len = m.Dimension - 1
+
+        [| for r in 0 .. len ->
+            let row = m.Entries.[r, *]
+            Array.fold2 (fun sum r c -> sum + r * c) 0.0 row tArr |]
+
+
+    static member (*) (m, p : Point) : Point =
+        let result = Matrix.multiplyHelper m p
+        Point.make result.[0] result.[1] result.[2]
+
+
+    static member (*) (m, v : Vector) : Vector =
+        let result = Matrix.multiplyHelper m v
+        Vector.make result.[0] result.[1] result.[2]
+
+    member x.Item
+        with get (r, c) = x.Entries.[r, c]
+
+module rec Matrix =
     let make rows =
         let dim = List.length rows
 
@@ -16,57 +70,6 @@ module rec Matrix =
               Entries = array2D rows }
         else
             failwith "Matrix must be square with dimension 2, 3 or 4"
-
-    type T with
-        static member (.=) (m1, m2 : T) =
-            let allWithinEpsilon =
-                let len = m1.Dimension - 1
-                seq {
-                    for r in 0 .. len do
-                        for c in 0 .. len do
-                            yield abs (m1.[r, c] - m2.[r, c]) <= Epsilon
-                }
-                |> Seq.forall id
-
-            m1.Dimension = m2.Dimension && allWithinEpsilon
-
-        static member (*) (m1, m2) =
-            let len = m1.Dimension - 1
-            let result = Array2D.zeroCreate m1.Dimension m1.Dimension
-
-            for r in 0 .. len do
-                for c in 0 .. len do
-                    let row = m1.Entries.[r, *]
-                    let col = m2.Entries.[*, c]
-                    Array.fold2 (fun sum r c -> sum + r * c) 0.0 row col
-                    |> Array2D.set result r c
-
-            { Dimension = m1.Dimension
-              Entries = result }
-
-        static member (*) (m, p : Point.T) : Point.T =
-            let result = multiplyHelper m p
-            Point.make result.[0] result.[1] result.[2]
-
-        static member (*) (m, v : Vector.T) : Vector.T =
-            let result = multiplyHelper m v
-            Vector.make result.[0] result.[1] result.[2]
-
-        member x.Item
-            with get (r, c) = x.Entries.[r, c]
-
-    let private multiplyHelper m (tuple : obj) : float [] =
-        let tArr =
-            match tuple with
-            | :? Point.T as p -> [| p.X; p.Y; p.Z; p.W |]
-            | :? Vector.T as v -> [| v.X; v.Y; v.Z; v.W |]
-            | _ -> failwith "Type needs to be point or vector"
-
-        let len = m.Dimension - 1
-
-        [| for r in 0 .. len ->
-            let row = m.Entries.[r, *]
-            Array.fold2 (fun sum r c -> sum + r * c) 0.0 row tArr |]
 
     let identity =
         make

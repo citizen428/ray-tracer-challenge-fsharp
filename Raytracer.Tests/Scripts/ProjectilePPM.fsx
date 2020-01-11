@@ -8,12 +8,12 @@ open System.IO
 open Raytracer
 
 type Projectile =
-    { position : Point.T
-      velocity : Vector.T }
+    { position : Point
+      velocity : Vector }
 
 type Environment =
-    { gravity : Vector.T
-      wind : Vector.T }
+    { gravity : Vector
+      wind : Vector }
 
 let tick env p =
     { position = p.position + p.velocity
@@ -28,8 +28,7 @@ let rec fly env p =
                    |> fly env
     }
 
-let onCanvas (c : Canvas.T) x y =
-    x >= 0 && x < c.Width && y >= 0 && y < c.Height
+let onCanvas (c : Canvas) x y = x >= 0 && x < c.Width && y >= 0 && y < c.Height
 
 // gravity -0.1 unit/tick, and wind is -0.01 unit/tick.​
 let env =

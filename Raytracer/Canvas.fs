@@ -3,12 +3,12 @@ namespace Raytracer
 open System
 open System.Text.RegularExpressions
 
-module Canvas =
-    type T =
-        { Width : int
-          Height : int
-          Pixels : Color.T [,] }
+type Canvas =
+    { Width : int
+      Height : int
+      Pixels : Color [,] }
 
+module Canvas =
     let make width height =
         { Width = width
           Height = height
@@ -23,7 +23,7 @@ module Canvas =
             let rgbVal = 255.0 * f |> round
             Math.Clamp(int rgbVal, 0, 255)
 
-        let colorToRgb (c : Color.T) =
+        let colorToRgb (c : Color) =
             sprintf "%d %d %d" (clamp c.Red) (clamp c.Green) (clamp c.Blue)
 
         let splitLongLines (rgbs : seq<string>) =

@@ -21,7 +21,7 @@ let drawClock width height =
 
     let canvas = Canvas.make width height
 
-    for hour in 1..12 do
+    for hour in 1 .. 12 do
         let tx = Transformation.rotationZ (hourAngle * (float hour))
         let point = tx * twelve
         let x = cx + (int point.X)

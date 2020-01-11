@@ -1,48 +1,52 @@
-﻿namespace Raytracer
+namespace Raytracer
 
 open Constants
 
+type Vector =
+    { X : float
+      Y : float
+      Z : float
+      W : float }
+
+    static member (+) (v1, v2) =
+        { X = v1.X + v2.X
+          Y = v1.Y + v2.Y
+          Z = v1.Z + v2.Z
+          W = v1.W + v2.W }
+
+
+    static member (-) (v1, v2) =
+        { X = v1.X - v2.X
+          Y = v1.Y - v2.Y
+          Z = v1.Z - v2.Z
+          W = v1.W - v2.W }
+
+
+    static member (~-) (v) =
+        { X = -v.X
+          Y = -v.Y
+          Z = -v.Z
+          W = -v.W }
+
+
+    static member (*) (v, scalar) =
+        { X = v.X * scalar
+          Y = v.Y * scalar
+          Z = v.Z * scalar
+          W = v.W * scalar }
+
+
+    static member (/) (v, scalar) =
+        { X = v.X / scalar
+          Y = v.Y / scalar
+          Z = v.Z / scalar
+          W = v.W / scalar }
+
+    static member (.=) (v1, v2) =
+        abs (v1.X - v2.X) < Epsilon && abs (v1.Y - v2.Y) < Epsilon
+        && abs (v1.Z - v2.Z) < Epsilon && abs (v1.W - v2.W) < Epsilon
+
 module Vector =
-    type T =
-        { X : float
-          Y : float
-          Z : float
-          W : float }
-
-        static member (+) (v1, v2) =
-            { X = v1.X + v2.X
-              Y = v1.Y + v2.Y
-              Z = v1.Z + v2.Z
-              W = v1.W + v2.W }
-
-        static member (-) (v1, v2) =
-            { X = v1.X - v2.X
-              Y = v1.Y - v2.Y
-              Z = v1.Z - v2.Z
-              W = v1.W - v2.W }
-
-        static member (~-) (v) =
-            { X = -v.X
-              Y = -v.Y
-              Z = -v.Z
-              W = -v.W }
-
-        static member (*) (v, scalar) =
-            { X = v.X * scalar
-              Y = v.Y * scalar
-              Z = v.Z * scalar
-              W = v.W * scalar }
-
-        static member (/) (v, scalar) =
-            { X = v.X / scalar
-              Y = v.Y / scalar
-              Z = v.Z / scalar
-              W = v.W / scalar }
-
-        static member (.=) (v1, v2) =
-            abs (v1.X - v2.X) < Epsilon && abs (v1.Y - v2.Y) < Epsilon
-            && abs (v1.Z - v2.Z) < Epsilon && abs (v1.W - v2.W) < Epsilon
-
     let make x y z =
         { X = x
           Y = y
