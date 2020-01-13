@@ -31,5 +31,6 @@
     <PackageReference Include="FsUnit.xUnit" Version="3.8.0" />
     <ProjectReference Include="..\Raytracer\Raytracer.fsproj" />
     <None Include="Scripts\Clock.fsx" />
+    <None Include="Scripts\SphereShadow.fsx" />
   </ItemGroup>
 </Project>
