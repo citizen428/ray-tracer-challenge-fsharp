@@ -117,3 +117,15 @@ let ``Computing the normal on a transformed sphere``() =
     let f = sqrt 2. / 2.
     let n = Shape.normalAt s (Point.make 0. f -f)
     n .= (Vector.make 0. 0.97014 -0.24254) |> should equal true
+
+[<Fact>]
+let ``A sphere has a default material``() =
+    let s = Sphere.make
+    s.Material |> should equal Material.make
+
+[<Fact>]
+let ``A sphere can be assinged a material``() =
+    let s = Sphere.make
+    let m = Material.make |> Material.withAmbient 1.
+    let s2 = Shape.texture s m
+    s2.Material |> should equal m

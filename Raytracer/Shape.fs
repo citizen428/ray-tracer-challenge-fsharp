@@ -6,7 +6,8 @@ type Shape =
     { Object : ShapeType
       Intersect : Shape -> Ray -> Shape Intersection list
       NormalAt : Shape -> Point -> Vector
-      Transformation : Matrix }
+      Transformation : Matrix
+      Material : Material }
     member x.InverseTransformation = Matrix.inverse x.Transformation
 
 module Shape =
@@ -14,7 +15,8 @@ module Shape =
         { Object = shape
           Intersect = intersectFn
           NormalAt = normalAtFn
-          Transformation = Matrix.identity }
+          Transformation = Matrix.identity
+          Material = Material.make }
 
     let intersect (shape : Shape) ray =
         let ray2 = Ray.transform ray shape.InverseTransformation
@@ -35,3 +37,5 @@ module Shape =
         let objPoint = toObjectSpace shape point
         let objNormal = shape.NormalAt shape objPoint
         toWorldSpace shape objNormal
+
+    let texture shape material = { shape with Material = material }

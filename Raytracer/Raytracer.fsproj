@@ -13,6 +13,8 @@
     <Compile Include="Transformation.fs" />
     <Compile Include="Ray.fs" />
     <Compile Include="Intersection.fs" />
+    <Compile Include="Light.fs" />
+    <Compile Include="Material.fs" />
     <Compile Include="Shape.fs" />
     <Compile Include="Sphere.fs" />
     <Compile Include="Program.fs" />
