@@ -3,7 +3,7 @@ namespace Raytracer
 module Sphere =
     let make =
         let intersect (s : Shape) (r : Ray) =
-            let sphere_to_ray = r.Origin - Point.make 0. 0. 0.
+            let sphere_to_ray = r.Origin - Point.origin
             let a = Vector.dot r.Direction r.Direction
             let b = 2. * (Vector.dot r.Direction sphere_to_ray)
             let c = (Vector.dot sphere_to_ray sphere_to_ray) - 1.
@@ -18,4 +18,7 @@ module Sphere =
                     [ Intersection.make f1 s
                       Intersection.make f2 s ]
 
-        Shape.make ShapeType.Sphere intersect
+        // Since this type represents unit spheres, we don't need to normalize
+        let normalAt (s : Shape) (p : Point) = p - Point.origin
+
+        Shape.make ShapeType.Sphere intersect normalAt

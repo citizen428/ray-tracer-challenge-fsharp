@@ -75,3 +75,45 @@ let ``Intersecting a translated sphere with a ray``() =
         Shape.transform Sphere.make (Transformation.translation 5. 0. 0.)
     let is = Shape.intersect s r
     is.Length |> should equal 0
+
+[<Fact>]
+let ``The normal on a sphere at a point on the x axis``() =
+    let s = Sphere.make
+    let n = Shape.normalAt s (Point.make 1. 0. 0.)
+    n |> should equal (Vector.make 1. 0. 0.)
+
+[<Fact>]
+let ``The normal on a sphere at a point on the y axis``() =
+    let s = Sphere.make
+    let n = Shape.normalAt s (Point.make 0. 1. 0.)
+    n |> should equal (Vector.make 0. 1. 0.)
+
+[<Fact>]
+let ``The normal on a sphere at a point on the z axis``() =
+    let s = Sphere.make
+    let n = Shape.normalAt s (Point.make 0. 0. 1.)
+    n |> should equal (Vector.make 0. 0. 1.)
+
+[<Fact>]
+let ``The normal on a sphere at a nonaxial point``() =
+    let s = Sphere.make
+    let f = sqrt 3. / 3.
+    let n = Shape.normalAt s (Point.make f f f)
+    n .= (Vector.make f f f) |> should equal true
+
+[<Fact>]
+let ``Computing the normal on a translated sphere``() =
+    let t = Transformation.translation 0. 1. 0.
+    let s = Shape.transform Sphere.make t
+    let n = Shape.normalAt s (Point.make 0. 1.70711 -0.70711)
+    n .= (Vector.make 0. 0.70711 -0.70711) |> should equal true
+
+[<Fact>]
+let ``Computing the normal on a transformed sphere``() =
+    let scale = Transformation.scaling 1. 0.5 1.
+    let rotate = Transformation.rotationZ (System.Math.PI / 5.)
+    let t = scale * rotate
+    let s = Shape.transform Sphere.make t
+    let f = sqrt 2. / 2.
+    let n = Shape.normalAt s (Point.make 0. f -f)
+    n .= (Vector.make 0. 0.97014 -0.24254) |> should equal true

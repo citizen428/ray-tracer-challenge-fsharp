@@ -5,13 +5,15 @@ type ShapeType = Sphere
 type Shape =
     { Object : ShapeType
       Intersect : Shape -> Ray -> Shape Intersection list
+      NormalAt : Shape -> Point -> Vector
       Transformation : Matrix }
     member x.InverseTransformation = Matrix.inverse x.Transformation
 
 module Shape =
-    let make shape intersectFn =
+    let make shape intersectFn normalAtFn =
         { Object = shape
           Intersect = intersectFn
+          NormalAt = normalAtFn
           Transformation = Matrix.identity }
 
     let intersect (shape : Shape) ray =
@@ -20,3 +22,16 @@ module Shape =
 
     let transform shape transformation =
         { shape with Transformation = transformation }
+
+    let toObjectSpace (shape : Shape) worldPoint =
+        shape.InverseTransformation * worldPoint
+
+    let toWorldSpace (shape : Shape) objNormal =
+        let worldNormal =
+            Matrix.transpose shape.InverseTransformation * objNormal
+        Vector.normalize { worldNormal with W = 0. }
+
+    let normalAt (shape : Shape) point =
+        let objPoint = toObjectSpace shape point
+        let objNormal = shape.NormalAt shape objPoint
+        toWorldSpace shape objNormal

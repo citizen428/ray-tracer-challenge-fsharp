@@ -38,3 +38,5 @@ module Point =
           Y = y
           Z = z
           W = 1.0 }
+
+    let origin = make 0. 0. 0.

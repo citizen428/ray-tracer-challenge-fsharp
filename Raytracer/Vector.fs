@@ -64,3 +64,6 @@ module Vector =
     let cross v1 v2 =
         make (v1.Y * v2.Z - v1.Z * v2.Y) (v1.Z * v2.X - v1.X * v2.Z)
             (v1.X * v2.Y - v1.Y * v2.X)
+
+    let reflect v n =
+        v - n * 2. * dot v n

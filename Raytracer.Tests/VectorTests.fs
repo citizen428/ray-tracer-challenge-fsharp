@@ -1,4 +1,4 @@
-﻿module VectorTests
+module VectorTests
 
 open FsUnit.Xunit
 open Xunit
@@ -107,3 +107,17 @@ let ``the cross product of two vectors is a new vector``() =
     let v2 = Vector.make 2.0 3.0 4.0
     Vector.cross v1 v2 |> should equal (Vector.make -1.0 2.0 -1.0)
     Vector.cross v2 v1 |> should equal (Vector.make 1.0 -2.0 1.0)
+
+[<Fact>]
+let ``Reflecting a vector approaching at 45°``() =
+    let v = Vector.make 1. -1.0 0.
+    let n = Vector.make 0. 1. 0.
+    let r = Vector.reflect v n
+    r |> should equal (Vector.make 1. 1. 0.)
+
+[<Fact>]
+let ``Reflecting a vector off a slanted surface``() =
+    let v = Vector.make 0. -1.0 0.
+    let n = Vector.make (sqrt 2. / 2.) (sqrt 2. / 2.) 0.
+    let r = Vector.reflect v n
+    r .= (Vector.make 1. 0. 0.) |> should equal true
