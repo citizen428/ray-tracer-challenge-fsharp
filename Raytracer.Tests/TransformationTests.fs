@@ -4,6 +4,7 @@ open FsUnit.Xunit
 open Xunit
 open Raytracer
 open Raytracer.Transformation
+open Raytracer.Constants
 
 [<Fact>]
 let ``Multiplying by a translation matrix``() =
