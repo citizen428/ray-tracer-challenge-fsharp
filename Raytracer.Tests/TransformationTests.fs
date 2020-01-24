@@ -162,3 +162,41 @@ let ``Chained transformations must be applied in reverse order``() =
     let translate = translation 10. 5. 7.
     let result = translate * scale * rotate * p
     result .= Point.make 15. 0. 7. |> should equal true
+
+[<Fact>]
+let ``The transformation matrix for the default orientation``() =
+    let from = Point.origin
+    let dest = Point.make 0. 0. -1.
+    let up = Vector.make 0. 1. 0.
+    let t = Transformation.viewTransform from dest up
+    t .= Matrix.identity |> should be True
+
+[<Fact>]
+let ``A view transformation matrix looking in positive z direction``() =
+    let from = Point.origin
+    let dest = Point.make 0. 0. 1.
+    let up = Vector.make 0. 1. 0.
+    let t = Transformation.viewTransform from dest up
+    t .= Transformation.scaling -1. 1. -1. |> should be True
+
+[<Fact>]
+let ``The view transformation moves the world, not the eye``() =
+    let from = Point.make 0. 0. 8.
+    let dest = Point.origin
+    let up = Vector.make 0. 1. 0.
+    let t = Transformation.viewTransform from dest up
+    t |> should equal (Transformation.translation 0. 0. -8.)
+
+[<Fact>]
+let ``An arbitrary view transformation``() =
+    let from = Point.make 1. 3. 2.
+    let dest = Point.make 4. -2. 8.
+    let up = Vector.make 1. 1. 0.
+    let t = Transformation.viewTransform from dest up
+    let expected =
+        Matrix.make
+            [ [ -0.50709; 0.50709; 0.67612; -2.36643 ]
+              [ 0.76772; 0.60609; 0.12122; -2.82843 ]
+              [ -0.35857; 0.59761; -0.71714; 0. ]
+              [ 0.; 0.; 0.; 1.] ]
+    t .= expected |> should be True
