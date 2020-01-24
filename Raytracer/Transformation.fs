@@ -58,3 +58,18 @@ module Transformation =
               [ yx; 1.; yz; 0. ]
               [ zx; zy; 1.; 0. ]
               [ 0.; 0.; 0.; 1. ] ]
+
+    let viewTransform from dest up =
+        let forward = dest - from |> Vector.normalize
+        let upNorm = Vector.normalize up
+        let left = Vector.cross forward upNorm
+        let trueUp = Vector.cross left forward
+
+        let orientation =
+            Matrix.make
+                [ [left.X ; left.Y ; left.Z ; 0.]
+                  [ trueUp.X ; trueUp.Y ; trueUp.Z ; 0.]
+                  [-forward.X ; -forward.Y ; -forward.Z ; 0.]
+                  [0. ; 0. ; 0. ; 1.] ]
+
+        orientation * translation -from.X -from.Y -from.Z
