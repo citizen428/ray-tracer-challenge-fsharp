@@ -42,7 +42,7 @@ module World =
         |> List.fold (fun color light ->
             let c =
                 Material.lighting c.Object.Material light c.Point c.EyeV
-                    c.NormalV
+                    c.NormalV Exposed
             color + c) Color.black
 
     let colorAt w r =

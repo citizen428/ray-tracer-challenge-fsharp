@@ -37,6 +37,7 @@ for y in 0 .. canvasSize - 1 do
             let eye = -ray.Direction
             let color =
                 Material.lighting hit.Object.Material light point eye normal
+                    Exposed
 
             Canvas.writePixel canvas x y color
 

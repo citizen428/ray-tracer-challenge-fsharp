@@ -21,31 +21,34 @@ module Material =
     let withSpecular s (m : Material) = { m with Specular = s }
     let withShinyness s (m : Material) = { m with Shininess = s }
 
-    let lighting material (light : Light) point eyev normalv =
+    let lighting material (light : Light) point eyev normalv visibility =
         // combine the surface color with the light's color/intensity​
         let effectiveColor = material.Color * light.Color
         // find the direction to the light source​
         let lightv = Vector.normalize (light.Position - point)
         // compute the ambient contribution​
         let ambient = effectiveColor * material.Ambient
-        // cosine between light and normal vector, negative value represents
-        // light on other side of surface
-        let lightDotNormal = Vector.dot lightv normalv
-        if lightDotNormal < 0. then
-            ambient
-        else
-            // compute the diffuse contribution​
-            let diffuse = effectiveColor * material.Diffuse * lightDotNormal
-            // cosine between reflection and eye vector, negative value
-            // represents reflection away from away
-            let reflectv = Vector.reflect -lightv normalv
-            let reflectDotEye = Vector.dot reflectv eyev
-
-            if reflectDotEye <= 0. then
-                ambient + diffuse
+        match visibility with
+        | Shadowed -> ambient
+        | Exposed ->
+            // cosine between light and normal vector, negative value represents
+            // light on other side of surface
+            let lightDotNormal = Vector.dot lightv normalv
+            if lightDotNormal < 0. then
+                ambient
             else
-                // compute the specular contribution​
-                let factor = reflectDotEye ** material.Shininess
-                let specular = light.Color * material.Specular * factor
+                // compute the diffuse contribution​
+                let diffuse = effectiveColor * material.Diffuse * lightDotNormal
+                // cosine between reflection and eye vector, negative value
+                // represents reflection away from away
+                let reflectv = Vector.reflect -lightv normalv
+                let reflectDotEye = Vector.dot reflectv eyev
 
-                ambient + diffuse + specular
+                if reflectDotEye <= 0. then
+                    ambient + diffuse
+                else
+                    // compute the specular contribution​
+                    let factor = reflectDotEye ** material.Shininess
+                    let specular = light.Color * material.Specular * factor
+
+                    ambient + diffuse + specular
