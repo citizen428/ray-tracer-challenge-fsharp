@@ -37,12 +37,24 @@ module World =
         |> List.collect (fun s -> Shape.intersect s r)
         |> Intersection.listOf
 
+    let isShadowed w l p =
+        let v = l.Position - p
+        let distance = Vector.magnitude v
+        let direction = Vector.normalize v
+
+        let r = Ray.make p direction
+        let is = intersect w r
+        match Intersection.hits is with
+        | Some hit when hit.TValue < distance -> Shadowed
+        | _ -> Exposed
+
     let shadeHit (w : World) (c : Shape Computation) =
         w.Lights
         |> List.fold (fun color light ->
+            let visibility = isShadowed w light c.OverPoint
             let c =
                 Material.lighting c.Object.Material light c.Point c.EyeV
-                    c.NormalV Exposed
+                    c.NormalV visibility
             color + c) Color.black
 
     let colorAt w r =
