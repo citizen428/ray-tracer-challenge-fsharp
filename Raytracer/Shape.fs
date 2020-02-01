@@ -5,6 +5,7 @@ type TestShapeData =
 
 type ShapeType =
     | Sphere
+    | Plane
     | TestShape of TestShapeData
 
 type Shape =
