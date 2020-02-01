@@ -1,6 +1,11 @@
 namespace Raytracer
 
-type ShapeType = Sphere
+type TestShapeData =
+    { mutable SavedRay : Ray option }
+
+type ShapeType =
+    | Sphere
+    | TestShape of TestShapeData
 
 type Shape =
     { Object : ShapeType

@@ -48,18 +48,6 @@ let ``A sphere is behind a ray``() =
     xs.[1].TValue |> should equal -4.0
 
 [<Fact>]
-let ``A sphere's default transformation``() =
-    let s = Sphere.make
-    s.Transformation |> should equal Matrix.identity
-
-[<Fact>]
-let ``Changing a sphere's transformation``() =
-    let s = Sphere.make
-    let t = Transformation.translation 2. 3. 4.
-    let s2 = Shape.transform s t
-    s2.Transformation |> should equal t
-
-[<Fact>]
 let ``Intersecting a scaled sphere with a ray``() =
     let r = Ray.make (Point.make 0. 0. -5.0) (Vector.make 0. 0. 1.)
     let s = Shape.transform Sphere.make (Transformation.scaling 2. 2. 2.)
@@ -100,32 +88,3 @@ let ``The normal on a sphere at a nonaxial point``() =
     let f = sqrt 3. / 3.
     let n = Shape.normalAt s (Point.make f f f)
     n .= (Vector.make f f f) |> should equal true
-
-[<Fact>]
-let ``Computing the normal on a translated sphere``() =
-    let t = Transformation.translation 0. 1. 0.
-    let s = Shape.transform Sphere.make t
-    let n = Shape.normalAt s (Point.make 0. 1.70711 -0.70711)
-    n .= (Vector.make 0. 0.70711 -0.70711) |> should equal true
-
-[<Fact>]
-let ``Computing the normal on a transformed sphere``() =
-    let scale = Transformation.scaling 1. 0.5 1.
-    let rotate = Transformation.rotationZ (System.Math.PI / 5.)
-    let t = scale * rotate
-    let s = Shape.transform Sphere.make t
-    let f = sqrt 2. / 2.
-    let n = Shape.normalAt s (Point.make 0. f -f)
-    n .= (Vector.make 0. 0.97014 -0.24254) |> should equal true
-
-[<Fact>]
-let ``A sphere has a default material``() =
-    let s = Sphere.make
-    s.Material |> should equal Material.make
-
-[<Fact>]
-let ``A sphere can be assinged a material``() =
-    let s = Sphere.make
-    let m = Material.make |> Material.withAmbient 1.
-    let s2 = Shape.texture s m
-    s2.Material |> should equal m
