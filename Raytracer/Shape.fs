@@ -28,7 +28,7 @@ module Shape =
         let ray2 = Ray.transform ray shape.InverseTransformation
         shape.Intersect shape ray2
 
-    let transform shape transformation =
+    let transform (shape : Shape) transformation =
         { shape with Transformation = transformation }
 
     let toObjectSpace (shape : Shape) worldPoint =

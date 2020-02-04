@@ -5,7 +5,8 @@ type Material =
       Ambient : float
       Diffuse : float
       Specular : float
-      Shininess : float }
+      Shininess : float
+      Pattern : Pattern option }
 
 module Material =
     let make =
@@ -13,17 +14,25 @@ module Material =
           Ambient = 0.1
           Diffuse = 0.9
           Specular = 0.9
-          Shininess = 200. }
+          Shininess = 200.
+          Pattern = None }
 
     let withColor c (m : Material) = { m with Color = c }
     let withAmbient a (m : Material) = { m with Ambient = a }
     let withDiffuse d (m : Material) = { m with Diffuse = d }
     let withSpecular s (m : Material) = { m with Specular = s }
     let withShinyness s (m : Material) = { m with Shininess = s }
+    let withPattern p (m : Material) = { m with Pattern = Some p }
 
-    let lighting material (light : Light) point eyev normalv visibility =
+    let lighting material transform (light : Light) point eyev normalv
+        visibility =
+        let color =
+            match material.Pattern with
+            | Some pattern -> Pattern.atShape pattern transform point
+            | None -> material.Color
+
         // combine the surface color with the light's color/intensity​
-        let effectiveColor = material.Color * light.Color
+        let effectiveColor = color * light.Color
         // find the direction to the light source​
         let lightv = Vector.normalize (light.Position - point)
         // compute the ambient contribution​

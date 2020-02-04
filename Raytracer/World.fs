@@ -53,8 +53,8 @@ module World =
         |> List.fold (fun color light ->
             let visibility = isShadowed w light c.OverPoint
             let c =
-                Material.lighting c.Object.Material light c.Point c.EyeV
-                    c.NormalV visibility
+                Material.lighting c.Object.Material c.Object.Transformation
+                    light c.OverPoint c.EyeV c.NormalV visibility
             color + c) Color.black
 
     let colorAt w r =

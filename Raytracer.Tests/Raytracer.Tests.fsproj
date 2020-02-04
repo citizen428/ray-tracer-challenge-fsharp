@@ -15,6 +15,7 @@
     <None Include="Scripts\Ch06-SphereLighting.fsx" />
     <None Include="Scripts\Ch07-Scene.fsx" />
     <None Include="Scripts\Ch09-Plane.fsx" />
+    <None Include="Scripts\Ch10-Patterns.fsx" />
     <Compile Include="TestUtilities.fs" />
     <Compile Include="VectorTests.fs" />
     <Compile Include="PointTests.fs" />
@@ -25,6 +26,7 @@
     <Compile Include="RayTests.fs" />
     <Compile Include="IntersectionTests.fs" />
     <Compile Include="LightTests.fs" />
+    <Compile Include="PatternTests.fs" />
     <Compile Include="MaterialTests.fs" />
     <Compile Include="ShapeTests.fs" />
     <Compile Include="SphereTests.fs" />
@@ -33,10 +35,10 @@
     <Compile Include="WorldTest.fs" />
     <Compile Include="CameraTests.fs" />
     <Compile Include="Program.fs" />
-    <PackageReference Include="coverlet.collector" Version="1.0.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="FsUnit.xUnit" Version="3.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="coverlet.collector" Version="1.0.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <ProjectReference Include="..\Raytracer\Raytracer.fsproj" />
   </ItemGroup>

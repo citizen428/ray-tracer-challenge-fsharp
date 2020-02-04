@@ -16,17 +16,18 @@ let ``Creating a world``() =
 let ``The default world``() =
     let w = World.defaultWorld
     let l = Light.make (Point.make -10.0 10. -10.0) Color.white
+    let c = (Color.make 0.8 1.0 0.6)
 
     let m =
         Material.make
-        |> withColor (Color.make 0.8 1.0 0.6)
+        |> withColor c
         |> withDiffuse 0.7
         |> withSpecular 0.2
 
     let t = Transformation.scaling 0.5 0.5 0.5
 
     w.Lights.[0] |> should equal l
-    w.Shapes.[0].Material |> should equal m
+    w.Shapes.[0].Material.Color |> should equal c
     w.Shapes.[1].Transformation |> should equal t
 
 [<Fact>]
