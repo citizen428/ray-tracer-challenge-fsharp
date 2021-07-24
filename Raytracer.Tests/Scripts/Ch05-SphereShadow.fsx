@@ -1,4 +1,4 @@
-#r "../../Raytracer/obj/Debug/netcoreapp3.1/Raytracer.dll"
+#r "../../Raytracer/obj/Debug/net5.0/Raytracer.dll"
 
 open Raytracer
 open System
