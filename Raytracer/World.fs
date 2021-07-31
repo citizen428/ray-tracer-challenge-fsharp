@@ -49,13 +49,15 @@ module World =
         | Some hit when hit.TValue < distance -> Shadowed
         | _ -> Exposed
 
-    let shadeHit (w: World) (c: Shape Computation) =
+    let rec shadeHit (w: World) (c: Shape Computation) remaining0 =
+        let remaining = remaining0 |> Option.defaultValue 4
+
         w.Lights
         |> List.fold
             (fun color light ->
                 let visibility = isShadowed w light c.OverPoint
 
-                let c =
+                let surface =
                     Material.lighting
                         c.Object.Material
                         c.Object.Transformation
@@ -65,14 +67,31 @@ module World =
                         c.NormalV
                         visibility
 
-                color + c)
+                let reflected = reflectedColor w c (Some remaining)
+                color + surface + reflected)
             Color.black
 
-    let colorAt w r =
+    and colorAt w r remaining0 =
+        let remaining = remaining0 |> Option.defaultValue 4
         let is = intersect w r
 
         match Intersection.hits is with
         | None -> Color.black
         | Some hit ->
             let cs = Computation.prepare hit r
-            shadeHit w cs
+            shadeHit w cs (Some remaining)
+
+    and reflectedColor w (c: Shape Computation) remaining0 =
+        let remaining = remaining0 |> Option.defaultValue 4
+
+        if remaining < 1 then
+            Color.black
+        elif c.Object.Material.Reflective = 0. then
+            Color.black
+        else
+            let reflectRay = Ray.make c.OverPoint c.ReflectV
+
+            let color =
+                colorAt w reflectRay (Some(remaining - 1))
+
+            color * c.Object.Material.Reflective

@@ -59,3 +59,11 @@ let ``The hit should offset the point`` () =
     |> should lessThan -(Constants.Epsilon / 2.)
 
     cs.Point.Z |> should greaterThan cs.OverPoint.Z
+
+[<Fact>]
+let ``Precomputing the reflection vector``() =
+   let s = Plane.make
+   let r = Ray.make (Point.make 0. 1. -1.) (Vector.make 0. -(sqrt 2. / 2.) (sqrt 2. / 2.))
+   let i = Intersection.make (sqrt 2.) s
+   let comps = Computation.prepare i r
+   comps.ReflectV |> should equal (Vector.make 0. (sqrt 2. / 2.) (sqrt 2. / 2.))

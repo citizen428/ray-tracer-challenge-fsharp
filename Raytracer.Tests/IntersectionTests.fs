@@ -54,3 +54,4 @@ let ``The hit is always the lowest non-negative intersection`` () =
     let i4 = Intersection.make 2. s
     let is = Intersection.listOf [ i1; i2; i3; i4 ]
     Intersection.hits is |> should equal (Some i4)
+

@@ -6,7 +6,8 @@ type Material =
       Diffuse: float
       Specular: float
       Shininess: float
-      Pattern: Pattern option }
+      Pattern: Pattern option
+      Reflective: float }
 
 module Material =
     let make =
@@ -15,7 +16,8 @@ module Material =
           Diffuse = 0.9
           Specular = 0.9
           Shininess = 200.
-          Pattern = None }
+          Pattern = None
+          Reflective = 0. }
 
     let withColor c (m: Material) = { m with Color = c }
     let withAmbient a (m: Material) = { m with Ambient = a }
@@ -23,6 +25,7 @@ module Material =
     let withSpecular s (m: Material) = { m with Specular = s }
     let withShinyness s (m: Material) = { m with Shininess = s }
     let withPattern p (m: Material) = { m with Pattern = Some p }
+    let withReflective r (m: Material) = { m with Reflective = r }
 
     let lighting material transform (light: Light) point eyev normalv visibility =
         let color =

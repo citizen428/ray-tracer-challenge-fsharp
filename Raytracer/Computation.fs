@@ -7,7 +7,8 @@ type 'T Computation =
       OverPoint: Point
       EyeV: Vector
       NormalV: Vector
-      Inside: bool }
+      Inside: bool
+      ReflectV: Vector }
 
 module Computation =
     let prepare (i: Shape Intersection) r =
@@ -21,10 +22,13 @@ module Computation =
         let overPoint =
             point + actualNormalv * Constants.Epsilon
 
+        let reflectV = Vector.reflect r.Direction actualNormalv
+
         { TValue = i.TValue
           Object = i.Object
           Point = point
           OverPoint = overPoint
           EyeV = eyev
           NormalV = actualNormalv
-          Inside = inside }
+          Inside = inside
+          ReflectV = reflectV }

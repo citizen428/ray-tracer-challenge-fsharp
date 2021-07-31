@@ -57,7 +57,7 @@ let ``Shading an intersection`` () =
     let shape = w.Shapes.[0]
     let i = Intersection.make 4. shape
     let comps = Computation.prepare i r
-    let c = World.shadeHit w comps
+    let c = World.shadeHit w comps None
 
     c .= Color.make 0.38066 0.47583 0.2855
     |> should be True
@@ -74,7 +74,7 @@ let ``Shading an intersection from the inside`` () =
     let shape = w.Shapes.[1]
     let i = Intersection.make 0.5 shape
     let comps = Computation.prepare i r
-    let c = World.shadeHit w comps
+    let c = World.shadeHit w comps None
 
     c .= Color.make 0.90498 0.90498 0.90498
     |> should be True
@@ -128,5 +128,104 @@ let ``shadeHit given an intersection in shadow`` () =
 
     let i = Intersection.make 4. s2
     let comps = Computation.prepare i r
-    let c = World.shadeHit w comps
+    let c = World.shadeHit w comps None
     c .= (Color.make 0.1 0.1 0.1) |> should be True
+
+[<Fact>]
+let ``The reflected color for a nonreflective material`` () =
+    let s =
+        Shape.texture Sphere.make (Material.make |> withAmbient 1.)
+
+    let w =
+        World.defaultWorld |> World.withShapes [ s ]
+
+    let r =
+        Ray.make Point.origin (Vector.make 0. 0. 1.)
+
+    let i = Intersection.make 1. s
+    let comps = Computation.prepare i r
+    let c = World.reflectedColor w comps None
+    c |> should equal Color.black
+
+[<Fact>]
+let ``The reflected color for a reflective material`` () =
+    let sphere =
+        Shape.texture Plane.make (Material.make |> withReflective 0.5)
+
+    let s =
+        Shape.transform sphere (Transformation.translation 0. -1. 0.)
+
+    let dw = World.defaultWorld
+    let w = World.withShapes (dw.Shapes @ [ s ]) dw
+
+    let r =
+        Ray.make (Point.make 0. 0. -3.) (Vector.make 0. -(sqrt 2. / 2.) (sqrt 2. / 2.))
+
+    let i = Intersection.make (sqrt 2.) s
+    let comps = Computation.prepare i r
+    let c = World.reflectedColor w comps None
+
+    c .= (Color.make 0.19032 0.2379 0.14274)
+    |> should equal true
+
+[<Fact>]
+let ``shadeHit with a reflective material`` () =
+    let plane =
+        Shape.texture Plane.make (Material.make |> withReflective 0.5)
+
+    let s =
+        Shape.transform plane (Transformation.translation 0. -1. 0.)
+
+    let dw = World.defaultWorld
+    let w = World.withShapes (dw.Shapes @ [ s ]) dw
+
+    let r =
+        Ray.make (Point.make 0. 0. -3.) (Vector.make 0. -(sqrt 2. / 2.) (sqrt 2. / 2.))
+
+    let i = Intersection.make (sqrt 2.) s
+    let comps = Computation.prepare i r
+    let c = World.shadeHit w comps None
+
+    c .= (Color.make 0.87677 0.92436 0.82918)
+    |> should equal true
+
+[<Fact>]
+let ``colorAt with mutually reflective surfaces`` () =
+    let l = Light.make Point.origin Color.white
+    let m = Material.make |> withReflective 1.
+
+    let lower =
+        Shape.transform (Shape.texture Plane.make m) (Transformation.translation 0. -1. 0.)
+
+    let upper =
+        Shape.transform (Shape.texture Plane.make m) (Transformation.translation 0. 1. 0.)
+
+    let w =
+        World.defaultWorld
+        |> World.withLights [ l ]
+        |> World.withShapes [ lower; upper ]
+
+    let r =
+        Ray.make Point.origin (Vector.make 0. 1. 0.)
+
+    (fun _ -> World.colorAt w r None |> ignore)
+    |> should not' (throw typeof<System.StackOverflowException>)
+
+[<Fact>]
+let ``The reflected color at the maximum recursive depth`` () =
+    let plane =
+        Shape.texture Plane.make (Material.make |> withReflective 0.5)
+
+    let s =
+        Shape.transform plane (Transformation.translation 0. -1. 0.)
+
+    let dw = World.defaultWorld
+    let w = World.withShapes (dw.Shapes @ [ s ]) dw
+
+    let r =
+        Ray.make (Point.make 0. 0. -3.) (Vector.make 0. -(sqrt 2. / 2.) (sqrt 2. / 2.))
+
+    let i = Intersection.make (sqrt 2.) s
+    let comps = Computation.prepare i r
+    let c = World.reflectedColor w comps (Some 0)
+    c = Color.black |> should equal true

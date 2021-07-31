@@ -142,3 +142,8 @@ let ``Lighting with a pattern applied`` () =
 
     c1 |> should equal Color.white
     c2 |> should equal Color.black
+
+[<Fact>]
+let ``Reflectivity for the default material``() =
+    let m = Material.make
+    m.Reflective |> should equal 0.0

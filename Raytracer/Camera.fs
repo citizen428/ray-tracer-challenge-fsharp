@@ -55,7 +55,7 @@ module Camera =
         for y in 0 .. c.VSize - 1 do
             for x in 0 .. c.HSize - 1 do
                 let ray = rayForPixel c x y
-                let color = World.colorAt w ray
+                let color = World.colorAt w ray None
                 Canvas.writePixel canvas x y color
 
         canvas
