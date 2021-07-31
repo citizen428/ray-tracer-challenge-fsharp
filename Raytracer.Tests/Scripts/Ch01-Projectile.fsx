@@ -4,13 +4,9 @@
 
 open Raytracer
 
-type Projectile =
-    { position : Point
-      velocity : Vector }
+type Projectile = { position: Point; velocity: Vector }
 
-type Environment =
-    { gravity : Vector
-      wind : Vector }
+type Environment = { gravity: Vector; wind: Vector }
 
 let tick env p =
     { position = p.position + p.velocity
@@ -20,9 +16,7 @@ let rec fly env p =
     seq {
         if p.position.Y > 0.0 then
             yield p
-            yield! p
-                   |> tick env
-                   |> fly env
+            yield! p |> tick env |> fly env
     }
 
 // gravity -0.1 unit/tick, and wind is -0.01 unit/tick.​
@@ -39,5 +33,4 @@ let projectile =
 fly env projectile
 |> Seq.iteri
     (fun i projectile ->
-        printf "Tick %-2d:\nPosition: %A\nVelocity: %A\n\n" i
-            (projectile.position) (projectile.velocity))
+        printf "Tick %-2d:\nPosition: %A\nVelocity: %A\n\n" i (projectile.position) (projectile.velocity))

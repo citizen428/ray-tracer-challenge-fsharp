@@ -30,9 +30,10 @@ let scene =
     World.make shapes [ light ]
 
 let view =
-    Transformation.viewTransform (Point.make 0. 1.5 -5.0)
-        (Point.make 0. 1. 0.) (Vector.make 0. 1. 0.)
-let camera = Camera.makeWithTransform 1000 500 (System.Math.PI / 3.) view
+    Transformation.viewTransform (Point.make 0. 1.5 -5.0) (Point.make 0. 1. 0.) (Vector.make 0. 1. 0.)
+
+let camera =
+    Camera.makeWithTransform 1000 500 (System.Math.PI / 3.) view
 
 let canvas = Camera.render camera scene
 

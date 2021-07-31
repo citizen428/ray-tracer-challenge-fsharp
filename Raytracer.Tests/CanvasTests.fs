@@ -6,20 +6,24 @@ open Raytracer
 open TestUtilities
 
 [<Fact>]
-let ``creating a canvas``() =
+let ``creating a canvas`` () =
     let canvas = Canvas.make 10 20
     canvas.Width |> should equal 10
     canvas.Height |> should equal 20
-    canvas.Pixels |> should equal (Array2D.create 20 10 Color.black)
+
+    canvas.Pixels
+    |> should equal (Array2D.create 20 10 Color.black)
 
 [<Fact>]
-let ``writing a pixel to a canvas``() =
+let ``writing a pixel to a canvas`` () =
     let canvas = Canvas.make 10 20
     Canvas.writePixel canvas 2 3 Color.red
-    Canvas.pixelAt canvas 2 3 |> should equal Color.red
+
+    Canvas.pixelAt canvas 2 3
+    |> should equal Color.red
 
 [<Fact>]
-let ``Constructing the PPM header``() =
+let ``Constructing the PPM header`` () =
     let c = Canvas.make 5 3
     let ppm = Canvas.toPpm c |> lines
 
@@ -28,7 +32,7 @@ let ``Constructing the PPM header``() =
     ppm.[2] |> should equal "255"
 
 [<Fact>]
-let ``Constructing the PPM pixel data``() =
+let ``Constructing the PPM pixel data`` () =
     let c = Canvas.make 5 3
     let c1 = Color.make 1.5 0.0 0.0
     let c2 = Color.make 0.0 0.5 0.0
@@ -39,24 +43,36 @@ let ``Constructing the PPM pixel data``() =
 
     let ppm = Canvas.toPpm c |> lines
 
-    ppm.[3] |> should equal "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
-    ppm.[4] |> should equal "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0"
-    ppm.[5] |> should equal "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255"
+    ppm.[3]
+    |> should equal "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+
+    ppm.[4]
+    |> should equal "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0"
+
+    ppm.[5]
+    |> should equal "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255"
 
 [<Fact>]
-let ``Splitting long lines in PPM files``() =
+let ``Splitting long lines in PPM files`` () =
     let color = Color.make 1.0 0.8 0.6
     let canvas = Canvas.make 10 2
     Array2D.iteri (fun y x _c -> Canvas.writePixel canvas x y color) canvas.Pixels
 
     let ppm = Canvas.toPpm canvas |> lines
 
-    ppm.[3] |> should equal "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
-    ppm.[4] |> should equal "153 255 204 153 255 204 153 255 204 153 255 204 153"
-    ppm.[5] |> should equal "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
-    ppm.[6] |> should equal "153 255 204 153 255 204 153 255 204 153 255 204 153"
+    ppm.[3]
+    |> should equal "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
+
+    ppm.[4]
+    |> should equal "153 255 204 153 255 204 153 255 204 153 255 204 153"
+
+    ppm.[5]
+    |> should equal "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
+
+    ppm.[6]
+    |> should equal "153 255 204 153 255 204 153 255 204 153 255 204 153"
 
 [<Fact>]
-let ``PPM files are terminated by a newline character``() =
+let ``PPM files are terminated by a newline character`` () =
     let ppm = Canvas.make 5 3 |> Canvas.toPpm
     ppm |> should endWith "\n"

@@ -1,12 +1,12 @@
 namespace Raytracer
 
 type Material =
-    { Color : Color
-      Ambient : float
-      Diffuse : float
-      Specular : float
-      Shininess : float
-      Pattern : Pattern option }
+    { Color: Color
+      Ambient: float
+      Diffuse: float
+      Specular: float
+      Shininess: float
+      Pattern: Pattern option }
 
 module Material =
     let make =
@@ -17,15 +17,14 @@ module Material =
           Shininess = 200.
           Pattern = None }
 
-    let withColor c (m : Material) = { m with Color = c }
-    let withAmbient a (m : Material) = { m with Ambient = a }
-    let withDiffuse d (m : Material) = { m with Diffuse = d }
-    let withSpecular s (m : Material) = { m with Specular = s }
-    let withShinyness s (m : Material) = { m with Shininess = s }
-    let withPattern p (m : Material) = { m with Pattern = Some p }
+    let withColor c (m: Material) = { m with Color = c }
+    let withAmbient a (m: Material) = { m with Ambient = a }
+    let withDiffuse d (m: Material) = { m with Diffuse = d }
+    let withSpecular s (m: Material) = { m with Specular = s }
+    let withShinyness s (m: Material) = { m with Shininess = s }
+    let withPattern p (m: Material) = { m with Pattern = Some p }
 
-    let lighting material transform (light : Light) point eyev normalv
-        visibility =
+    let lighting material transform (light: Light) point eyev normalv visibility =
         let color =
             match material.Pattern with
             | Some pattern -> Pattern.atShape pattern transform point
@@ -34,20 +33,24 @@ module Material =
         // combine the surface color with the light's color/intensity​
         let effectiveColor = color * light.Color
         // find the direction to the light source​
-        let lightv = Vector.normalize (light.Position - point)
+        let lightv =
+            Vector.normalize (light.Position - point)
         // compute the ambient contribution​
         let ambient = effectiveColor * material.Ambient
+
         match visibility with
         | Shadowed -> ambient
         | Exposed ->
             // cosine between light and normal vector, negative value represents
             // light on other side of surface
             let lightDotNormal = Vector.dot lightv normalv
+
             if lightDotNormal < 0. then
                 ambient
             else
                 // compute the diffuse contribution​
-                let diffuse = effectiveColor * material.Diffuse * lightDotNormal
+                let diffuse =
+                    effectiveColor * material.Diffuse * lightDotNormal
                 // cosine between reflection and eye vector, negative value
                 // represents reflection away from away
                 let reflectv = Vector.reflect -lightv normalv

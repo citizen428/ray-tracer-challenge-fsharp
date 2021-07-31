@@ -5,14 +5,14 @@ open Xunit
 open Raytracer
 
 [<Fact>]
-let ``An intersection encapsulates T and Object``() =
+let ``An intersection encapsulates T and Object`` () =
     let s = Sphere.make
     let i = Intersection.make 3.5 s
     i.TValue |> should equal 3.5
     i.Object |> should equal s
 
 [<Fact>]
-let ``Aggregating intersections``() =
+let ``Aggregating intersections`` () =
     let s = Sphere.make
     let i1 = Intersection.make 1. s
     let i2 = Intersection.make 2. s
@@ -22,7 +22,7 @@ let ``Aggregating intersections``() =
     is.[1].TValue |> should equal 2.
 
 [<Fact>]
-let ``The hit, when all intersections have positive TValues``() =
+let ``The hit, when all intersections have positive TValues`` () =
     let s = Sphere.make
     let i1 = Intersection.make 1. s
     let i2 = Intersection.make 2. s
@@ -30,7 +30,7 @@ let ``The hit, when all intersections have positive TValues``() =
     Intersection.hits is |> should equal (Some i1)
 
 [<Fact>]
-let ``The hit, when some intersections have negative TValues``() =
+let ``The hit, when some intersections have negative TValues`` () =
     let s = Sphere.make
     let i1 = Intersection.make -1.0 s
     let i2 = Intersection.make 2. s
@@ -38,7 +38,7 @@ let ``The hit, when some intersections have negative TValues``() =
     Intersection.hits is |> should equal (Some i2)
 
 [<Fact>]
-let ``The hit, when all intersections have negative TValues``() =
+let ``The hit, when all intersections have negative TValues`` () =
     let s = Sphere.make
     let i1 = Intersection.make -1.0 s
     let i2 = Intersection.make -2.0 s
@@ -46,7 +46,7 @@ let ``The hit, when all intersections have negative TValues``() =
     Intersection.hits is |> should equal None
 
 [<Fact>]
-let ``The hit is always the lowest non-negative intersection``() =
+let ``The hit is always the lowest non-negative intersection`` () =
     let s = Sphere.make
     let i1 = Intersection.make 5. s
     let i2 = Intersection.make 7. s

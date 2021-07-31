@@ -4,9 +4,9 @@ open System
 open System.Text.RegularExpressions
 
 type Canvas =
-    { Width : int
-      Height : int
-      Pixels : Color [,] }
+    { Width: int
+      Height: int
+      Pixels: Color [,] }
 
 module Canvas =
     let make width height =
@@ -23,14 +23,15 @@ module Canvas =
             let rgbVal = 255.0 * f |> round
             Math.Clamp(int rgbVal, 0, 255)
 
-        let colorToRgb (c : Color) =
+        let colorToRgb (c: Color) =
             sprintf "%d %d %d" (clamp c.Red) (clamp c.Green) (clamp c.Blue)
 
-        let splitLongLines (rgbs : seq<string>) =
+        let splitLongLines (rgbs: seq<string>) =
             let row = String.Join(" ", rgbs)
-            Regex.Replace(row, "[\s\S]{1,69}(?!\S)",
-                          (fun m -> m.Value.TrimStart(' ') + "\n"))
-                 .TrimEnd('\n')
+
+            Regex
+                .Replace(row, "[\s\S]{1,69}(?!\S)", (fun m -> m.Value.TrimStart(' ') + "\n"))
+                .TrimEnd('\n')
 
         let pixelsToString canvas =
             canvas.Pixels

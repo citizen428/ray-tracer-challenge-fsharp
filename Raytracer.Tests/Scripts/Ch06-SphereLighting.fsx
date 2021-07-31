@@ -22,11 +22,14 @@ let light = Light.make lightPosition Color.white
 
 for y in 0 .. canvasSize - 1 do
     let worldY = half - pixelSize * float y
+
     for x in 0 .. canvasSize - 1 do
         let worldX = -half + pixelSize * float x
         let position = Point.make worldX worldY wallZ
+
         let ray =
             Ray.make rayOrigin (position - rayOrigin |> Vector.normalize)
+
         let is = Shape.intersect sphere ray
 
         match Intersection.hits is with
@@ -35,9 +38,9 @@ for y in 0 .. canvasSize - 1 do
             let point = Ray.position ray hit.TValue
             let normal = Shape.normalAt hit.Object point
             let eye = -ray.Direction
+
             let color =
-                Material.lighting hit.Object.Material light point eye normal
-                    Exposed
+                Material.lighting hit.Object.Material light point eye normal Exposed
 
             Canvas.writePixel canvas x y color
 

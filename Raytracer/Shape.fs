@@ -1,7 +1,6 @@
 namespace Raytracer
 
-type TestShapeData =
-    { mutable SavedRay : Ray option }
+type TestShapeData = { mutable SavedRay: Ray option }
 
 type ShapeType =
     | Sphere
@@ -9,11 +8,11 @@ type ShapeType =
     | TestShape of TestShapeData
 
 type Shape =
-    { Object : ShapeType
-      Intersect : Shape -> Ray -> Shape Intersection list
-      NormalAt : Shape -> Point -> Vector
-      Transformation : Matrix
-      Material : Material }
+    { Object: ShapeType
+      Intersect: Shape -> Ray -> Shape Intersection list
+      NormalAt: Shape -> Point -> Vector
+      Transformation: Matrix
+      Material: Material }
     member x.InverseTransformation = Matrix.inverse x.Transformation
 
 module Shape =
@@ -24,22 +23,27 @@ module Shape =
           Transformation = Matrix.identity
           Material = Material.make }
 
-    let intersect (shape : Shape) ray =
-        let ray2 = Ray.transform ray shape.InverseTransformation
+    let intersect (shape: Shape) ray =
+        let ray2 =
+            Ray.transform ray shape.InverseTransformation
+
         shape.Intersect shape ray2
 
-    let transform (shape : Shape) transformation =
-        { shape with Transformation = transformation }
+    let transform (shape: Shape) transformation =
+        { shape with
+              Transformation = transformation }
 
-    let toObjectSpace (shape : Shape) worldPoint =
+    let toObjectSpace (shape: Shape) worldPoint =
         shape.InverseTransformation * worldPoint
 
-    let toWorldSpace (shape : Shape) objNormal =
+    let toWorldSpace (shape: Shape) objNormal =
         let worldNormal =
-            Matrix.transpose shape.InverseTransformation * objNormal
+            Matrix.transpose shape.InverseTransformation
+            * objNormal
+
         Vector.normalize { worldNormal with W = 0. }
 
-    let normalAt (shape : Shape) point =
+    let normalAt (shape: Shape) point =
         let objPoint = toObjectSpace shape point
         let objNormal = shape.NormalAt shape objPoint
         toWorldSpace shape objNormal

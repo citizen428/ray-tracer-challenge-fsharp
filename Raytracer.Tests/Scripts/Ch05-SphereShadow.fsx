@@ -17,11 +17,14 @@ let sphere = Sphere.make
 
 for y in 0 .. canvasSize - 1 do
     let worldY = half - pixelSize * float y
+
     for x in 0 .. canvasSize - 1 do
         let worldX = -half + pixelSize * float x
         let position = Point.make worldX worldY wallZ
+
         let ray =
             Ray.make rayOrigin (position - rayOrigin |> Vector.normalize)
+
         let is = Shape.intersect sphere ray
 
         let color =

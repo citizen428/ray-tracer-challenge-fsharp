@@ -2,11 +2,16 @@ namespace Raytracer
 
 module Sphere =
     let make =
-        let intersect (s : Shape) (r : Ray) =
+        let intersect (s: Shape) (r: Ray) =
             let sphere_to_ray = r.Origin - Point.origin
             let a = Vector.dot r.Direction r.Direction
-            let b = 2. * (Vector.dot r.Direction sphere_to_ray)
-            let c = (Vector.dot sphere_to_ray sphere_to_ray) - 1.
+
+            let b =
+                2. * (Vector.dot r.Direction sphere_to_ray)
+
+            let c =
+                (Vector.dot sphere_to_ray sphere_to_ray) - 1.
+
             let discriminant = b * b - 4. * a * c
 
             if discriminant < 0. then
@@ -14,11 +19,11 @@ module Sphere =
             else
                 let f1 = (-b - sqrt (discriminant)) / (2. * a)
                 let f2 = (-b + sqrt (discriminant)) / (2. * a)
-                Intersection.listOf
-                    [ Intersection.make f1 s
-                      Intersection.make f2 s ]
+
+                Intersection.listOf [ Intersection.make f1 s
+                                      Intersection.make f2 s ]
 
         // Since this type represents unit spheres, we don't need to normalize
-        let normalAt (s : Shape) (p : Point) = p - Point.origin
+        let normalAt (s: Shape) (p: Point) = p - Point.origin
 
         Shape.make ShapeType.Sphere intersect normalAt

@@ -12,10 +12,10 @@ let scene =
     let floor = Shape.texture Plane.make floorMaterial
 
     let pattern =
-        Pattern.transform (Pattern.stripe Color.red Color.white)
-            (Transformation.scaling 0.2 0.2 0.2)
+        Pattern.transform (Pattern.stripe Color.red Color.white) (Transformation.scaling 0.2 0.2 0.2)
 
-    let sphereMaterial = Material.make |> Material.withPattern pattern
+    let sphereMaterial =
+        Material.make |> Material.withPattern pattern
 
     let sphere =
         Shape.transform Sphere.make (Transformation.translation 0. 1. 2.)
@@ -29,10 +29,10 @@ let scene =
     let plane = Shape.transform Plane.make t
 
     let planePattern =
-        Pattern.transform (Pattern.ring Color.red Color.black)
-            (Transformation.scaling 0.2 0.2 0.2)
+        Pattern.transform (Pattern.ring Color.red Color.black) (Transformation.scaling 0.2 0.2 0.2)
 
-    let planeMaterial = Material.make |> Material.withPattern planePattern
+    let planeMaterial =
+        Material.make |> Material.withPattern planePattern
 
     let wall = Shape.texture plane planeMaterial
 
@@ -44,9 +44,10 @@ let scene =
     World.make shapes [ light ]
 
 let view =
-    Transformation.viewTransform (Point.make 0. 1.5 -5.0)
-        (Point.make 0. 1. 0.) (Vector.make 0. 1. 0.)
-let camera = Camera.makeWithTransform 1000 500 (System.Math.PI / 3.) view
+    Transformation.viewTransform (Point.make 0. 1.5 -5.0) (Point.make 0. 1. 0.) (Vector.make 0. 1. 0.)
+
+let camera =
+    Camera.makeWithTransform 1000 500 (System.Math.PI / 3.) view
 
 let canvas = Camera.render camera scene
 

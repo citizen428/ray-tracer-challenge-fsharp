@@ -1,8 +1,6 @@
 namespace Raytracer
 
-type Ray =
-    { Origin : Point
-      Direction : Vector }
+type Ray = { Origin: Point; Direction: Vector }
 
 module Ray =
     let make origin direction =
@@ -11,4 +9,5 @@ module Ray =
 
     let position ray t = ray.Origin + ray.Direction * t
 
-    let transform ray (m : Matrix) = make (m * ray.Origin) (m * ray.Direction)
+    let transform ray (m: Matrix) =
+        make (m * ray.Origin) (m * ray.Direction)

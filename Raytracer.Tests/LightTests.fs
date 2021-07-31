@@ -5,7 +5,7 @@ open Xunit
 open Raytracer
 
 [<Fact>]
-let ``A point light has a position and intensity``() =
+let ``A point light has a position and intensity`` () =
     let position = Point.origin
     let intensity = Color.white
     let light = Light.make position intensity

@@ -3,13 +3,11 @@ namespace Raytracer
 open Material
 
 type World =
-    { Shapes : Shape list
-      Lights : Light list }
+    { Shapes: Shape list
+      Lights: Light list }
 
 module World =
-    let make shapes lights =
-        { Shapes = shapes
-          Lights = lights }
+    let make shapes lights = { Shapes = shapes; Lights = lights }
 
     let empty = make [] []
 
@@ -18,7 +16,8 @@ module World =
     let withLights lights world = { world with Lights = lights }
 
     let defaultWorld =
-        let l = Light.make (Point.make -10.0 10. -10.0) Color.white
+        let l =
+            Light.make (Point.make -10.0 10. -10.0) Color.white
 
         let m =
             Material.make
@@ -27,10 +26,11 @@ module World =
             |> withSpecular 0.2
 
         let s1 = Shape.texture Sphere.make m
+
         let s2 =
             Shape.transform Sphere.make (Transformation.scaling 0.5 0.5 0.5)
-        { Shapes = [ s1; s2 ]
-          Lights = [ l ] }
+
+        { Shapes = [ s1; s2 ]; Lights = [ l ] }
 
     let intersect w r =
         w.Shapes
@@ -44,21 +44,33 @@ module World =
 
         let r = Ray.make p direction
         let is = intersect w r
+
         match Intersection.hits is with
         | Some hit when hit.TValue < distance -> Shadowed
         | _ -> Exposed
 
-    let shadeHit (w : World) (c : Shape Computation) =
+    let shadeHit (w: World) (c: Shape Computation) =
         w.Lights
-        |> List.fold (fun color light ->
-            let visibility = isShadowed w light c.OverPoint
-            let c =
-                Material.lighting c.Object.Material c.Object.Transformation
-                    light c.OverPoint c.EyeV c.NormalV visibility
-            color + c) Color.black
+        |> List.fold
+            (fun color light ->
+                let visibility = isShadowed w light c.OverPoint
+
+                let c =
+                    Material.lighting
+                        c.Object.Material
+                        c.Object.Transformation
+                        light
+                        c.OverPoint
+                        c.EyeV
+                        c.NormalV
+                        visibility
+
+                color + c)
+            Color.black
 
     let colorAt w r =
         let is = intersect w r
+
         match Intersection.hits is with
         | None -> Color.black
         | Some hit ->
